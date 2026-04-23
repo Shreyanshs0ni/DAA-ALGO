@@ -1,50 +1,46 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
-
-struct Item {
+struct Item
+{
     int value, weight;
 };
-
-// Comparator to sort items by value/weight ratio (descending)
-bool cmp(Item a, Item b) {
-    double r1 = (double)a.value / a.weight;
-    double r2 = (double)b.value / b.weight;
-    return r1 > r2;
+bool cmp(Item a, Item b)
+{
+    return (double)a.value / a.weight > (double)b.value / b.weight;
 }
-
-double fractionalKnapsack(int W, vector<Item>& items) {
-    // Sort items based on value/weight ratio
-    sort(items.begin(), items.end(), cmp);
-
-    double totalValue = 0.0;
-
-    for (auto &item : items) {
-        if (W >= item.weight) {
-            // Take full item
-            totalValue += item.value;
-            W -= item.weight;
-        } else {
-            // Take fraction of item
-            totalValue += item.value * ((double)W / item.weight);
+double knapsack(int w, vector<Item> &arr)
+{
+    sort(arr.begin(), arr.end(), cmp);
+    double res = 0;
+    for (auto &i : arr)
+    {
+        if (w >= i.weight)
+        {
+            res += i.value;
+            w -= i.weight;
+        }
+        else
+        {
+            res += i.value * ((double)w / i.weight);
             break;
         }
     }
-
-    return totalValue;
+    return res;
 }
+int main()
+{
+    int W = 50; // capacity
 
-int main() {
-    int W = 50; // Knapsack capacity
-
-    vector<Item> items = {
+    vector<Item> arr = {
         {60, 10},
         {100, 20},
-        {120, 30}
-    };
+        {120, 30}};
 
-    double maxValue = fractionalKnapsack(W, items);
+    double ans = knapsack(W, arr);
 
-    cout << "Maximum value in Knapsack = " << maxValue << endl;
+    cout << "Maximum value = " << ans << endl;
 
     return 0;
 }
